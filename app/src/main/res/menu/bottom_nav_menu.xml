@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/medicine"
+        android:title="Medicine" />
+
+
+    <item
+        android:id="@+id/navigation_diet"
+        android:icon="@drawable/diett"
+        android:title="Diet" />
+    <item
+        android:id="@+id/navigation_activity"
+        android:icon="@drawable/exercise"
+        android:title="Activity" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="More" />
+
+</menu>

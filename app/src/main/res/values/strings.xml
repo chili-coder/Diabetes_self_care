@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Diabetes Self-Care</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Add Reminder</string>
+    <string name="title_dashboard">Information Panel</string>
+    <string name="title_settings">Settings</string>
+    <string name="medicine_name">Drug Name</string>
+    <string name="dosage_summary">Dose</string>
+    <string name="add_medicine">Add</string>
+    <string name="string_time">Set Time*</string>
+    <string name="medicine_name_hint">Drug Name</string>
+    <string name="string_from">From when*</string>
+    <string name="string_schedule">How many times in a day</string>
+    <string name="pick_a_time">Hours to be Taken</string>
+    <string name="once_a_day">Once a Day</string>
+    <string name="twice_a_day">2 Times a Day</string>
+    <string name="thrice_a_day">3 Times a Day</string>
+    <string name="_4_times_a_day">4 Times a Day</string>
+    <string name="_5_times_per_day">5 Times a Day</string>
+    <string name="number_of_total_doses">Quantity</string>
+    <string name="sample_date">Enter the day</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="time_to_take">Medicine Time&#160;</string>
+    <string name="snooze">Postpone</string>
+    <string name="after10">10 min later</string>
+    <string name="dismiss">Close</string>
+    <string name="take">Take</string>
+    <string name="notification">Notification</string>
+    <string name="alarm">Alarm</string>
+    <string name="both">Both</string>
+    <string name="alert_type">Alert Type</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="info_app">This app will give you a soft reminder on the 7 different components of diabetes self management includes diet, drug, physical exercise, follow-up visit, blood glucose testing, risk behaviors and foot care.</string>
+    <string name="yes">Yes</string>
+    <string name="exit_msg">Are you sure for exit?</string>
+    <string name="no">No</string>
+</resources>
