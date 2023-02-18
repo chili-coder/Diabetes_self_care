@@ -15,13 +15,6 @@
     </style>
 
 
-
-
-
-
-
-
-
     <style name="AlertDialog.Theme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="buttonBarStyle">@style/AlertDialog.ButtonBar</item>
         <item name="dialogCornerRadius">@dimen/dialog_corner_radius</item>
@@ -43,4 +36,13 @@
         <item name="toolbarStyle">@style/Widget.MedDose.Toolbar</item>
 
     </style>
+
+    <style name="Theme.DiabetesSelfCare.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DiabetesSelfCare.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DiabetesSelfCare.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

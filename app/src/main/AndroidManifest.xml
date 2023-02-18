@@ -17,6 +17,18 @@
         android:theme="@style/Theme.DiabetesSelfCare"
         tools:targetApi="31">
         <activity
+            android:name=".followup.AlarmFollowupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".followup.FollowupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tobacco.AlarmTobaccoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tobacco.TobaccoActivity"
+            android:exported="false" />
+        <activity
             android:name=".InfoActivity"
             android:exported="false" />
         <activity
@@ -44,6 +56,8 @@
         <receiver android:name=".med.AlarmReceiver" />
         <receiver android:name=".diet.AlarmReciverDiet" />
         <receiver android:name=".activity.AlarmRecivePhysical" />
+        <receiver android:name=".tobacco.AlarmRevicerTobacco" />
+        <receiver android:name=".followup.AlarmReciverFollowup" />
     </application>
 
 </manifest>

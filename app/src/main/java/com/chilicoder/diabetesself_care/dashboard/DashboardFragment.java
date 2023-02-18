@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.chilicoder.diabetesself_care.DeveloperActivity;
 import com.chilicoder.diabetesself_care.InfoActivity;
 import com.chilicoder.diabetesself_care.R;
+import com.chilicoder.diabetesself_care.followup.FollowupActivity;
+import com.chilicoder.diabetesself_care.tobacco.TobaccoActivity;
 
 
 public class DashboardFragment extends Fragment {
@@ -50,6 +52,22 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), DeveloperActivity.class));
+            }
+        });
+
+        tabaccoCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getActivity(), TobaccoActivity.class));
+            }
+        });
+
+        followupCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getActivity(), FollowupActivity.class));
             }
         });
 

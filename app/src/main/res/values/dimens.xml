@@ -62,7 +62,7 @@
     <dimen name="day_header_decor_width">300dp</dimen>
     <dimen name="day_header_decor_height">72dp</dimen>
 
-    <item name="tag_letter_spacing" type="dimen" format="float">-0.06</item>
+    <item name="tag_letter_spacing" format="float" type="dimen">-0.06</item>
 
     <!-- Agenda -->
     <dimen name="agenda_item_stroke_width">2dp</dimen>
@@ -106,5 +106,6 @@
     <!-- per android.view.ViewGroup.LayoutParams -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
     <item name="wrap_content" format="integer" type="dimen">-2</item>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
