@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.chilicoder.diabetesself_care.DeveloperActivity;
 import com.chilicoder.diabetesself_care.InfoActivity;
 import com.chilicoder.diabetesself_care.R;
+import com.chilicoder.diabetesself_care.blood.BloodActivity;
 import com.chilicoder.diabetesself_care.followup.FollowupActivity;
 import com.chilicoder.diabetesself_care.tobacco.TobaccoActivity;
 
@@ -68,6 +69,13 @@ public class DashboardFragment extends Fragment {
             public void onClick(View view) {
 
                 startActivity(new Intent(getActivity(), FollowupActivity.class));
+            }
+        });
+        bloodCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getActivity(), BloodActivity.class));
             }
         });
 

@@ -17,6 +17,9 @@
         android:theme="@style/Theme.DiabetesSelfCare"
         tools:targetApi="31">
         <activity
+            android:name=".blood.BloodActivity"
+            android:exported="false" />
+        <activity
             android:name=".followup.AlarmFollowupActivity"
             android:exported="false" />
         <activity

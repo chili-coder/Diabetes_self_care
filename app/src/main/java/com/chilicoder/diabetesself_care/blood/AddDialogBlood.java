@@ -1,4 +1,4 @@
-package com.chilicoder.diabetesself_care.followup;
+package com.chilicoder.diabetesself_care.blood;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -9,14 +9,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -27,14 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chilicoder.diabetesself_care.MainActivity;
 import com.chilicoder.diabetesself_care.R;
-import com.chilicoder.diabetesself_care.time.TimeAdapter2;
+import com.chilicoder.diabetesself_care.followup.AddDialogFollowup;
+import com.chilicoder.diabetesself_care.followup.AlarmFollowupActivity;
+import com.chilicoder.diabetesself_care.followup.AlarmReciverFollowup;
+import com.chilicoder.diabetesself_care.followup.DatabaseHelperFollowup;
+import com.chilicoder.diabetesself_care.followup.FollowupActivity;
 import com.chilicoder.diabetesself_care.time.TimeAdapter3;
+import com.chilicoder.diabetesself_care.time.TimeAdapter4;
 import com.chilicoder.diabetesself_care.time.TimeSelectorItem;
-import com.chilicoder.diabetesself_care.tobacco.AddDialogTobacco;
-import com.chilicoder.diabetesself_care.tobacco.AlarmRevicerTobacco;
-import com.chilicoder.diabetesself_care.tobacco.AlarmTobaccoActivity;
-import com.chilicoder.diabetesself_care.tobacco.DatabaseHelperTobacco;
-import com.chilicoder.diabetesself_care.tobacco.TobaccoActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -49,19 +47,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenuItemClickListener {
-    public static final String TAG = "Add_Dialog_Tobacco";
+public class AddDialogBlood  extends DialogFragment implements Toolbar.OnMenuItemClickListener {
+    public static final String TAG = "Add_Dialog_Blood";
 
     /*Encoding the page where the alarm was added by the user*/
 
     /*(1) In this section, the ids of the components on the add_medicine_dialog.xml page are defined*/
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
-    private EditText editTextDoctorName, editTextHospitalName, editTextLocationName;
+    private EditText editTextCenterName, editTextReportName;
     private ChipGroup chipGroupScheduleTimes, chipGroupAlertType;
     private Chip chipSelected;
-    private int[] chipArrayIds = {R.id.chip1_followup};
-    private int[] chipAlertArrayIds = {R.id.chip_notification_followup, R.id.chip_alarm_followup};
+    private int[] chipArrayIds = {R.id.chip1_blood};
+    private int[] chipAlertArrayIds = {R.id.chip_notification_blood, R.id.chip_alarm_blood};
 
     private List<TimeSelectorItem> timeSelectorItems;
     private int mPerDay = 1;
@@ -73,9 +71,9 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
 
     private Calendar calendar;
 
-    private FollowupActivity homeFragment;
+    private BloodActivity homeFragment;
 
-    public AddDialogFollowup(FollowupActivity homeFragment) {
+    public AddDialogBlood(BloodActivity homeFragment) {
         this.homeFragment = homeFragment;
     }
     /*(1)*/
@@ -101,16 +99,16 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.add_followup_dialog, container, false);
+        View root = inflater.inflate(R.layout.add_blood_dialog, container, false);
         //(4) dialogdaki asıl bileşen id'leri buradaki id'lere bağlanır.
-        toolbar = root.findViewById(R.id.toolbar_followup);
-        textViewDate = root.findViewById(R.id.text_view_select_date_followup);
-        editTextDoctorName = root.findViewById(R.id.editText_name_followup);
-        editTextHospitalName = root.findViewById(R.id.editText_hospital_followup);
-        editTextLocationName = root.findViewById(R.id.editText_location_followup);
-        chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times_followup);
-        recyclerView = root.findViewById(R.id.recycler_view_time_followup);
-        chipGroupAlertType = root.findViewById(R.id.chip_group_alert_type_followup);
+        toolbar = root.findViewById(R.id.toolbar_blood);
+        textViewDate = root.findViewById(R.id.text_view_select_date_blood);
+        editTextCenterName = root.findViewById(R.id.editText_name_blood);
+        editTextReportName = root.findViewById(R.id.editText_report_blood);
+
+        chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times_blood);
+        recyclerView = root.findViewById(R.id.recycler_view_time_blood);
+        chipGroupAlertType = root.findViewById(R.id.chip_group_alert_type_blood);
         chipSelected = root.findViewById(chipGroupAlertType.getCheckedChipId());
 
         return root;
@@ -120,10 +118,10 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         toolbar.setNavigationOnClickListener(v -> {
-            Toast.makeText(AddDialogFollowup.this.getContext(), "It is closed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddDialogBlood.this.getContext(), "It is closed", Toast.LENGTH_SHORT).show();
             dismiss();
         });
-        toolbar.setTitle("Add Follow-up");
+        toolbar.setTitle("Add Blood Glucose");
         toolbar.inflateMenu(R.menu.add_dialog_menu);
         toolbar.setOnMenuItemClickListener(this);
 
@@ -172,7 +170,7 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
             TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Select Time (Click here)");
             timeSelectorItems.add(timeSelectorItem);
         }
-        adapter = new TimeAdapter3(timeSelectorItems, getActivity());
+        adapter = new TimeAdapter4(timeSelectorItems, getActivity());
         recyclerView.setAdapter(adapter);
         chipGroupScheduleTimes.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = chipGroup.findViewById(id);
@@ -188,7 +186,7 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
                             TimeSelectorItem timeSelectorItem = new TimeSelectorItem("Select Time (Click here)");
                             timeSelectorItems.add(timeSelectorItem);
                         }
-                        adapter = new TimeAdapter3(timeSelectorItems, getActivity());
+                        adapter = new TimeAdapter4(timeSelectorItems, getActivity());
                         recyclerView.setAdapter(adapter);
                     }
                 }
@@ -208,27 +206,22 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        FollowupActivity homeActivity = (FollowupActivity) getActivity();
-        String followupName = editTextDoctorName.getText().toString();
-        String hospital= editTextHospitalName.getText().toString();
-        String location = editTextLocationName.getText().toString();
+        BloodActivity homeActivity = (BloodActivity) getActivity();
+        String bloodCenterName = editTextCenterName.getText().toString();
+        String report= editTextReportName.getText().toString();
 
 
 
 
-
-        if (followupName.isEmpty()) {
-            editTextDoctorName.setError("Enter Doctor Name");  //error message appears in margin when no name is entered
+        if (bloodCenterName.isEmpty()) {
+            editTextCenterName.setError("Enter Center Name");  //error message appears in margin when no name is entered
             return false;
         }
-        if (hospital.isEmpty()) {
-            editTextHospitalName.setError("Enter Hospital Name");  //error message appears in margin when no name is entered
-            return false;
-        }
-        if (location.isEmpty()) {
-            editTextLocationName.setError("Enter Location");  //error message appears in margin when no name is entered
-            return false;
-        }
+//        if (hospital.isEmpty()) {
+//            editTextReportName.setError("Enter Previous report");  //error message appears in margin when no name is entered
+//            return false;
+//        }
+
         if (homeActivity.timeItems.size() != mPerDay) {
             showAlertDialog("Time");
             return false;
@@ -253,8 +246,8 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
         String nMM=String.valueOf(month);
         String nYY=String.valueOf(year);
 
-       // String mTime="Time: "+nHour+":"+nMin;
-      //  String mDate="Date: "+nDD+"-"+nMM+"-"+nYY;
+        // String mTime="Time: "+nHour+":"+nMin;
+        //  String mDate="Date: "+nDD+"-"+nMM+"-"+nYY;
 
 
         String mDate=textViewDate.getText().toString();
@@ -275,8 +268,8 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
         }
         String timingList = json.toString();
         Log.d(TAG, "arrayList:" + timingList);
-        DatabaseHelperFollowup databaseHelper = new DatabaseHelperFollowup(getContext());
-        databaseHelper.insertNewFollowup(followupName,hospital,location,mTime,mDate, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
+        DatabaseHelperBlood databaseHelper = new DatabaseHelperBlood(getContext());
+        databaseHelper.insertNewBlood(bloodCenterName,report,mDate, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
         Calendar calendar = Calendar.getInstance();
         //BUG: Fixed the alarm sounding from the system day even though the user has selected a day.
         //The day selected by the user was only displayed in the edittext, but not in the setAlarm function.
@@ -284,37 +277,36 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
         calendar.set(Calendar.YEAR,year);
         calendar.set(Calendar.MONTH,month);
         calendar.set(Calendar.DAY_OF_MONTH,day);
-
         calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
         calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-      //  setNotification2(calendar, followupName);
+        //  setNotification2(calendar, followupName);
 
         switch (alertType) {
             case "Notification":
-               setNotification(calendar, followupName);
-               setNotification2(calendar, followupName);
+                setNotification(calendar, bloodCenterName);
+                setNotification2(calendar, bloodCenterName);
 
                 break;
             case "Alarm":
-                setAlarmFollowup(calendar, followupName);
+                setAlarmBlood(calendar, bloodCenterName);
                 break;
             default: //hata mı değil mi tam olarak anlayamadım.
-              setAlarmFollowup(calendar, followupName);
-              setNotification(calendar, followupName);
-              setNotification2(calendar, followupName);
+                setAlarmBlood(calendar, bloodCenterName);
+                setNotification(calendar, bloodCenterName);
+                setNotification2(calendar, bloodCenterName);
                 break;
 
         }
-        Log.i("AddDialogFollowup.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
-        homeFragment.loadFollowup();
+        Log.i("AddDialogBlood.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+        homeFragment.loadBlood();
         dismiss();
         return true;
     }
 
-    public void setAlarmFollowup(Calendar mAlarmTime, String medicineName) {
+    public void setAlarmBlood(Calendar mAlarmTime, String medicineName) {
         Intent intent = new Intent(getActivity(), AlarmFollowupActivity.class);
         intent.putExtra("followupName", medicineName);
 
@@ -335,7 +327,7 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
 
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         Intent notificationIntent = new Intent(getContext(), AlarmReciverFollowup.class);
-        notificationIntent.putExtra("followupName", medicineName);
+        notificationIntent.putExtra("bloodCenterName", medicineName);
 
         PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
@@ -353,7 +345,7 @@ public class AddDialogFollowup  extends DialogFragment implements Toolbar.OnMenu
         calendar.setTime(mNotificationTime.getTime());
         calendar.add(Calendar.DAY_OF_MONTH, -3);
         long triggerTime = calendar.getTimeInMillis();
-        notificationIntent.putExtra("followupName", medicineName);
+        notificationIntent.putExtra("bloodCenterName", medicineName);
         PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, broadcast);
 

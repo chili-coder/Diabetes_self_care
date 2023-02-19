@@ -1,4 +1,4 @@
-package com.chilicoder.diabetesself_care.followup;
+package com.chilicoder.diabetesself_care.blood;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 
@@ -15,19 +15,19 @@ import androidx.core.app.NotificationCompat;
 
 import com.chilicoder.diabetesself_care.MainActivity;
 import com.chilicoder.diabetesself_care.R;
-import com.chilicoder.diabetesself_care.tobacco.AlarmTobaccoActivity;
+import com.chilicoder.diabetesself_care.followup.AlarmFollowupActivity;
 
-public class AlarmReciverFollowup extends BroadcastReceiver {
+public class AlarmReciverBlood extends BroadcastReceiver {
 
 
-    private static final String CHANNEL_ID = "com.chilicoder.notification_followup";
+    private static final String CHANNEL_ID = "com.chilicoder.notification_blood";
     private static final int NOTIFICATION_ID=100;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent notificationIntent = new Intent(context, AlarmFollowupActivity.class);
-        String medicineName=intent.getStringExtra("followupName");
-        notificationIntent.putExtra("followupName", medicineName);
+        String medicineName=intent.getStringExtra("bloodCenterName");
+        notificationIntent.putExtra("bloodCenterName", medicineName);
 
 
 
@@ -40,9 +40,9 @@ public class AlarmReciverFollowup extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.careicon)
                 .setContentTitle("Follow-up Visit!")
-                .setContentText("Visit Dr. " + intent.getStringExtra("followupName"))
+                .setContentText("Visit Dr. " + intent.getStringExtra("bloodCenterName"))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Visit " + intent.getStringExtra("followupName")))
+                        .bigText("Visit " + intent.getStringExtra("bloodCenterName")))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false);
@@ -57,7 +57,7 @@ public class AlarmReciverFollowup extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Followup Reminder ",
+                    "Blood Reminder ",
                     IMPORTANCE_DEFAULT
             );
             notificationManager.createNotificationChannel(channel);
