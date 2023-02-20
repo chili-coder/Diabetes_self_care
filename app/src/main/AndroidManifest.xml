@@ -17,6 +17,15 @@
         android:theme="@style/Theme.DiabetesSelfCare"
         tools:targetApi="31">
         <activity
+            android:name=".footcare.AlarmFootActivity"
+            android:exported="false" />
+        <activity
+            android:name=".footcare.FootActivity"
+            android:exported="false" />
+        <activity
+            android:name=".blood.AlarmBloodActivity"
+            android:exported="false" />
+        <activity
             android:name=".blood.BloodActivity"
             android:exported="false" />
         <activity
@@ -61,6 +70,8 @@
         <receiver android:name=".activity.AlarmRecivePhysical" />
         <receiver android:name=".tobacco.AlarmRevicerTobacco" />
         <receiver android:name=".followup.AlarmReciverFollowup" />
+        <receiver android:name=".blood.AlarmReciverBlood" />
+        <receiver android:name=".footcare.AlarmReceiverFoot" />
     </application>
 
 </manifest>

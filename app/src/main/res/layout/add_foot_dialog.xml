@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_blood"
+        android:id="@+id/toolbar_foot"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:paddingEnd="16dp"
@@ -42,13 +42,13 @@
                     style="@style/Widget.Design.TextInputLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editText_name_blood"
+                        android:id="@+id/editText_name_foot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
-                        android:hint="Center Name"
+                        android:hint="Name"
                         android:textSize="24sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -59,13 +59,13 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_gravity="center"
-                    android:text="Blood Glucose Test Date*"
+                    android:text="When Start*"
                     android:textColor="@color/purple_700"
                     android:textSize="12sp" />
 
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text_view_select_date_blood"
+                    android:id="@+id/text_view_select_date_foot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -96,21 +96,21 @@
                     android:paddingBottom="8dp">
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chip_group_times_blood"
+                        android:id="@+id/chip_group_times_foot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         app:singleSelection="true"
                         app:selectionRequired="true"
-                        app:checkedChip="@+id/chip1_blood"
+                        app:checkedChip="@+id/chip1_foot"
                         app:singleLine="true"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:ellipsize="end" >
 
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip1_blood"
-                            android:text="@string/once_a_day"
+                            android:id="@+id/chip1_foot"
+                            android:text="Every Week"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -132,7 +132,7 @@
                     android:textSize="12sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_time_blood"
+                    android:id="@+id/recycler_view_time_foot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -162,13 +162,13 @@
                     android:paddingBottom="8dp">
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chip_group_alert_type_blood"
+                        android:id="@+id/chip_group_alert_type_foot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         app:singleSelection="true"
                         app:selectionRequired="true"
-                        app:checkedChip="@+id/chip_notification_blood"
+                        app:checkedChip="@+id/chip_notification_foot"
                         app:singleLine="true"
                         android:layout_gravity="center"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -176,7 +176,7 @@
 
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_notification_blood"
+                            android:id="@+id/chip_notification_foot"
                             android:text="@string/notification"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="120dp"
@@ -184,7 +184,7 @@
                             android:layout_height="wrap_content"/>
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_alarm_blood"
+                            android:id="@+id/chip_alarm_foot"
                             android:text="@string/alarm"
                             android:textAlignment="center"
                             style="@style/Widget.MaterialComponents.Chip.Choice"

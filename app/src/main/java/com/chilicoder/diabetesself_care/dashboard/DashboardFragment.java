@@ -15,6 +15,7 @@ import com.chilicoder.diabetesself_care.InfoActivity;
 import com.chilicoder.diabetesself_care.R;
 import com.chilicoder.diabetesself_care.blood.BloodActivity;
 import com.chilicoder.diabetesself_care.followup.FollowupActivity;
+import com.chilicoder.diabetesself_care.footcare.FootActivity;
 import com.chilicoder.diabetesself_care.tobacco.TobaccoActivity;
 
 
@@ -76,6 +77,14 @@ public class DashboardFragment extends Fragment {
             public void onClick(View view) {
 
                 startActivity(new Intent(getActivity(), BloodActivity.class));
+            }
+        });
+
+        footCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getActivity(), FootActivity.class));
             }
         });
 

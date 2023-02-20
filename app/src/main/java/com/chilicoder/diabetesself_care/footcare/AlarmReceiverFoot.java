@@ -1,4 +1,4 @@
-package com.chilicoder.diabetesself_care.blood;
+package com.chilicoder.diabetesself_care.footcare;
 
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 
@@ -15,19 +15,19 @@ import androidx.core.app.NotificationCompat;
 
 import com.chilicoder.diabetesself_care.MainActivity;
 import com.chilicoder.diabetesself_care.R;
-import com.chilicoder.diabetesself_care.followup.AlarmFollowupActivity;
+import com.chilicoder.diabetesself_care.blood.AlarmBloodActivity;
 
-public class AlarmReciverBlood extends BroadcastReceiver {
+public class AlarmReceiverFoot extends BroadcastReceiver {
 
 
-    private static final String CHANNEL_ID = "com.chilicoder.notification_blood_g";
+    private static final String CHANNEL_ID = "com.chilicoder.notification_foot";
     private static final int NOTIFICATION_ID=100;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent notificationIntent = new Intent(context, AlarmBloodActivity.class);
-        String medicineName=intent.getStringExtra("bloodName");
-        notificationIntent.putExtra("bloodName", medicineName);
+        Intent notificationIntent = new Intent(context, AlarmFootActivity.class);
+        String medicineName=intent.getStringExtra("footName");
+        notificationIntent.putExtra("footName", medicineName);
 
 
 
@@ -39,10 +39,10 @@ public class AlarmReciverBlood extends BroadcastReceiver {
         //Setting the Notification part (The text that falls on the notification panel, not the alarm.)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.careicon)
-                .setContentTitle("Blood Glucose Test!")
-                .setContentText("Test Center " + intent.getStringExtra("bloodName"))
+                .setContentTitle("Foot Care!")
+                .setContentText("Time to " + intent.getStringExtra("footName"))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Test Center " + intent.getStringExtra("bloodName")))
+                        .bigText("Time to " + intent.getStringExtra("footName")))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false);
@@ -57,7 +57,7 @@ public class AlarmReciverBlood extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Bloods Reminder ",
+                    "Foot Reminder ",
                     IMPORTANCE_DEFAULT
             );
             notificationManager.createNotificationChannel(channel);

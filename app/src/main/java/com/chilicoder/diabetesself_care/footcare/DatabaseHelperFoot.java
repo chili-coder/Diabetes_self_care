@@ -1,6 +1,4 @@
-package com.chilicoder.diabetesself_care.blood;
-
-import static android.provider.SettingsSlicesContract.KEY_LOCATION;
+package com.chilicoder.diabetesself_care.footcare;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.chilicoder.diabetesself_care.followup.FollowupItem;
 import com.chilicoder.diabetesself_care.tobacco.Tobacco;
 
 import org.json.JSONArray;
@@ -20,27 +17,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class DatabaseHelperBlood  extends SQLiteOpenHelper {
+public class DatabaseHelperFoot extends SQLiteOpenHelper {
 
 
-    private static final String DB_NAME = "Bloodsreminder";
+    private static final String DB_NAME = "Footcarereminder";
     private static final int DB_VERSION = 1;
-    private static final String DB_TABLE = "Blood";
+    private static final String DB_TABLE = "Footcares";
     private static final String KEY_ID = "ID";
     private static final String KEY_NAME = "Name";
-    private static final String KEY_REPORT= "Report";
-
     private static final String KEY_DAY = "Day";
     private static final String KEY_MONTH = "Month";
-    private static final String KEY_YEAR= "Year";
-
-    private static final String KEY_TIME= "Time";
-    private static final String KEY_DATE= "Date";
-    private static final String KEY_TIMES_PER_DAY= "TimesPerDay";
-    private static final String KEY_TOTAL_DOSES= "TotalDoses";
-    private static final String KEY_TIMINGS= "Timings";
+    private static final String KEY_YEAR = "Year";
+    private static final String KEY_TIMES_PER_DAY = "TimesPerDay";
+    private static final String KEY_TOTAL_DOSES = "TotalDoses";
+    private static final String KEY_TIMINGS = "Timings";
     private static final String KEY_ALERT_TYPE = "AlertType";
-    public DatabaseHelperBlood(Context context) {
+
+    public DatabaseHelperFoot(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -50,17 +43,13 @@ public class DatabaseHelperBlood  extends SQLiteOpenHelper {
         String query = String.format("CREATE TABLE IF NOT EXISTS %s (" +
                 "%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s TEXT NOT NULL, " +
-                "%s TEXT NOT NULL, " +
-                "%s TEXT NOT NULL, " +
-                "%s TEXT NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s INTEGER NOT NULL, " +
                 "%s TEXT NOT NULL, " +
-                "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME,KEY_REPORT, KEY_DAY, KEY_MONTH, KEY_YEAR,KEY_TIME,KEY_DATE, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS, KEY_ALERT_TYPE);
-
+                "%s TEXT NOT NULL);", DB_TABLE, KEY_ID, KEY_NAME, KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES, KEY_TIMINGS, KEY_ALERT_TYPE);
         sqLiteDatabase.execSQL(query);
     }
 
@@ -71,46 +60,41 @@ public class DatabaseHelperBlood  extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void insertNewBloods(String bloodName,String repost,String mTime,String mDate, int day, int month,
-                                  int year, int noOfTimesPerDay, int totalDoses, String timings, String alertType) {
+    public void insertNewFoot(String footName, int day, int month,
+                                 int year, int noOfTimesPerDay, int totalDoses, String timings, String alertType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, bloodName);
-        values.put(KEY_REPORT, repost);
-        values.put(KEY_DAY , day);
+        values.put(KEY_NAME, footName);
+        values.put(KEY_DAY, day);
         values.put(KEY_MONTH, month);
         values.put(KEY_YEAR, year);
-        values.put(KEY_TIME, mTime);
-        values.put(KEY_DATE, mDate);
         values.put(KEY_TIMES_PER_DAY, noOfTimesPerDay);
         values.put(KEY_TOTAL_DOSES, totalDoses);
         values.put(KEY_TIMINGS, timings);
         values.put(KEY_ALERT_TYPE, alertType);
         db.insertWithOnConflict(DB_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.i("Follow up DB Helper",  bloodName + day + month + year + noOfTimesPerDay + totalDoses + timings + alertType);
+        Log.i("Foot DB Helper", footName + day + month + year + noOfTimesPerDay + totalDoses + timings + alertType);
         db.close();
     }
 
-    public void deleteBloods(String dietName) {
+    public void deleteFoot(String dietName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DB_TABLE, KEY_NAME + " = ?", new String[]{dietName});
         db.close();
     }
 
 
-    public List<BloodItem> getBloodList() {
-        List<BloodItem> dietList = new ArrayList<>();
+    public List<FootItem> getFootList() {
+        List<FootItem> dietList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
-
-        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME,KEY_REPORT,KEY_TIME,KEY_DATE, KEY_TIMES_PER_DAY}, null, null, null, null, KEY_ID+" DESC");
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, KEY_ID + " DESC");
         while (cursor.moveToNext()) {
-            BloodItem homeItem = new BloodItem(cursor.getString(0) , cursor.getString(1) ,cursor.getString(2),cursor.getString(3));
+            FootItem homeItem = new FootItem(cursor.getString(0), cursor.getString(1) + " a week");
             dietList.add(homeItem);
         }
         cursor.close();
         db.close();
-        return  dietList;
+        return dietList;
 
     }
 
@@ -125,7 +109,6 @@ public class DatabaseHelperBlood  extends SQLiteOpenHelper {
         db.close();
         return id;
     }
-
 
 
     public List<String> getTimings(String medicineName) {
@@ -166,14 +149,13 @@ public class DatabaseHelperBlood  extends SQLiteOpenHelper {
             mPerDay = cursor.getInt(3);
             mTotalDodes = cursor.getInt(4);
         }
-        int totalDays = mTotalDodes/mPerDay;
+        int totalDays = mTotalDodes / mPerDay;
         Calendar startDate = Calendar.getInstance();
         startDate.set(Calendar.DAY_OF_MONTH, day);
         startDate.set(Calendar.MONTH, month);
         startDate.set(Calendar.YEAR, year);
-        long daysBetween = Math.round((float) (mNextAlarmDate.getTimeInMillis() - startDate.getTimeInMillis()) / (72 * 60 * 60 * 1000));
+        long daysBetween = Math.round((float) (mNextAlarmDate.getTimeInMillis() - startDate.getTimeInMillis()) / (24 * 60 * 60 * 1000));
         int daysLeft = (int) (totalDays - daysBetween);
         return daysLeft;
     }
-
 }

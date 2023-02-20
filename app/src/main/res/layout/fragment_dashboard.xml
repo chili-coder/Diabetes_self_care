@@ -141,7 +141,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text=" Avoid using tabacco "
+                        android:text=" Avoid using Tobacco "
                         android:textAllCaps="true"
                         android:textColor="@color/purple_700"
                         android:textSize="14sp"

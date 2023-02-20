@@ -52,7 +52,7 @@ public class TobaccoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView textView = findViewById(R.id.text_home_tobacco);
-        recyclerView = findViewById(R.id.recycler_view_tobacco);
+     recyclerView = findViewById(R.id.recycler_view_tobacco);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -63,18 +63,6 @@ public class TobaccoActivity extends AppCompatActivity {
         fabAddMedicine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                DialogFragment dialog = TobacoDialog.newInstance();
-//                ((TobacoDialog) dialog).setCallback(new TobacoDialog.Callback() {
-//                    @Override
-//                    public void onActionClick(String name) {
-//                        Toast.makeText(TobaccoActivity.this, name, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                dialog.show(getSupportFragmentManager(), "tag");
-
-//                Intent intent =new Intent(TobaccoActivity.this,AddTobaccoActivity.class);
-//                startActivity(intent);
 
                 AddDialogTobacco addMedicineDialog = new   AddDialogTobacco(TobaccoActivity.this);
                 addMedicineDialog.show(getSupportFragmentManager(), "Add_Dialog_Tobacco");

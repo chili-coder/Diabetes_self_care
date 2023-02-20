@@ -3,22 +3,24 @@ package com.chilicoder.diabetesself_care.blood;
 public class BloodItem {
 
 
-    private String bloodCenterName;
+    private String bloodName;
     private String report;
+    private String mTime;
     private String mDate;
 
-    public BloodItem(String bloodCenterName, String report, String mDate) {
-        this.bloodCenterName = bloodCenterName;
+    public BloodItem(String bloodName, String report, String mTime, String mDate) {
+        this.bloodName = bloodName;
         this.report = report;
+        this.mTime = mTime;
         this.mDate = mDate;
     }
 
-    public String getBloodCenterName() {
-        return bloodCenterName;
+    public String getBloodName() {
+        return bloodName;
     }
 
-    public void setBloodCenterName(String bloodCenterName) {
-        this.bloodCenterName = bloodCenterName;
+    public void setBloodName(String bloodName) {
+        this.bloodName = bloodName;
     }
 
     public String getReport() {
@@ -27,6 +29,14 @@ public class BloodItem {
 
     public void setReport(String report) {
         this.report = report;
+    }
+
+    public String getmTime() {
+        return mTime;
+    }
+
+    public void setmTime(String mTime) {
+        this.mTime = mTime;
     }
 
     public String getmDate() {
