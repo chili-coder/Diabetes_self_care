@@ -88,7 +88,7 @@ public class DatabaseHelperDiet extends SQLiteOpenHelper {
     public List<DietItem> getDietList() {
         List<DietItem> dietList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, KEY_ID+" DESC");
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, KEY_ID +" DESC");
         while (cursor.moveToNext()) {
             DietItem homeItem = new DietItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
             dietList.add(homeItem);

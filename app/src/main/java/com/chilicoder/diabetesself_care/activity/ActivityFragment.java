@@ -59,12 +59,7 @@ public class ActivityFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_activity, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(getActivity(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//
-//            }
-//        });
+
         recyclerView = root.findViewById(R.id.recycler_view_activity);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -10,7 +10,7 @@ public class TimeItem {
         this.minute = minute;
         this.posInRecyclerView = posInRecyclerView;
 
-        //saat ve dakika ögeleri
+
     }
 
     public int getHour() {

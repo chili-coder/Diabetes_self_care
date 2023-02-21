@@ -48,10 +48,6 @@ import java.util.List;
 public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog";
 
-    /*Alarmın kullanıcı tarafından eklendiği sayfanın kodlanması*/
-
-    /*(1) Bu kısımda add_medicine_dialog.xml sayfasındaki bileşenlerin idleri tanımlanmıştır*/
-
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName;
@@ -79,18 +75,18 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); //(2) normal stil ve açılan xml dosyasının full ekran olmasını sağlayan kod.
+        super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
     }
 
     @Override
-    public void onStart() {  //(3) dialog başlatıldığı an ekrandaki boyutlarının ayarlanması
+    public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);//(3.1) Boyutlar set edilir.
+            dialog.getWindow().setLayout(width, height);
 
         }
     }
@@ -99,7 +95,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.add_medicine_dialog, container, false);
-        //(4) dialogdaki asıl bileşen id'leri buradaki id'lere bağlanır.
+
         toolbar = root.findViewById(R.id.toolbar);
         textViewDate = root.findViewById(R.id.text_view_select_date);
         editTextMedicineName = root.findViewById(R.id.editText_medicine_name);
@@ -123,15 +119,15 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         toolbar.inflateMenu(R.menu.add_dialog_menu);
         toolbar.setOnMenuItemClickListener(this);
 
-        final Calendar c = Calendar.getInstance(); //içinde bulunduğumuz gün ay ve yıl.
+        final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR); //
         int mMonth = c.get(Calendar.MONTH); //
         int mDay = c.get(Calendar.DAY_OF_MONTH); //
 
         calendar = Calendar.getInstance();
         calendar.set(mYear, mMonth, mDay);
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy"); //data formatı
-        textViewDate.setText(format.format(calendar.getTime())); //datetext e set edilir. Sistem günü xml dosyası açılır açılmaz görünür
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+        textViewDate.setText(format.format(calendar.getTime()));
 
 
         textViewDate.setOnClickListener(view1 -> {
@@ -144,8 +140,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
 
                     }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); //HATA DÜZELTİLMESİ: Sistem gününden
-            //önceki günlere erişim uygulamayı durdurduğu için önceki günlere erişim engellendi.
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePickerDialog.show();
         });
 
@@ -274,7 +269,7 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
             case "Alarm":
                 setAlarm(calendar, medicineName);
                 break;
-            default: //hata mı değil mi tam olarak anlayamadım.
+            default: //I'm not sure if it's an error or not.
                 setAlarm(calendar, medicineName);
                 setNotification(calendar, medicineName);
                 break;

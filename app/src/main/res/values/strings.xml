@@ -44,4 +44,5 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="team">The team of Dr. Touhid Bhuiyan,\nDaffodil International University, Bangladesh</string>
 </resources>

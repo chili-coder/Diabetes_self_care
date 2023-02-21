@@ -43,6 +43,7 @@ public class MedFragment extends Fragment {
 
 
     private List<MedItem> medItems;
+    private TextView noData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,20 +53,17 @@ public class MedFragment extends Fragment {
                 ViewModelProviders.of(this).get(MedViewModel.class);
 
         root = inflater.inflate(R.layout.fragment_med, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(getActivity(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//
-//            }
-//        });
+        final TextView emptyView= root.findViewById(R.id.text_home_1);
+
         recyclerView = root.findViewById(R.id.recycler_view_medicine);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
        medItems = new ArrayList<>();
 
-        loadMedicines();
+       loadMedicines();
+
+
 
         ExtendedFloatingActionButton fabAddMedicine = root.findViewById(R.id.fab_add_medicine);
         fabAddMedicine.setOnClickListener(new View.OnClickListener() {

@@ -50,9 +50,6 @@ import java.util.List;
 public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog_Foot";
 
-    /*Encoding the page where the alarm was added by the user*/
-
-    /*(1) In this section, the ids of the components on the add_medicine_dialog.xml page are defined*/
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextDoctorName, editTextHospitalName;
@@ -76,22 +73,22 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
     public AddDialogFoot(FootActivity homeFragment) {
         this.homeFragment = homeFragment;
     }
-    /*(1)*/
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); //(2) normal stil ve açılan xml dosyasının full ekran olmasını sağlayan kod.
+        super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
     }
 
     @Override
-    public void onStart() {  //(3) dialog başlatıldığı an ekrandaki boyutlarının ayarlanması
+    public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);//(3.1) Boyutlar set edilir.
+            dialog.getWindow().setLayout(width, height);
 
         }
     }
@@ -100,11 +97,11 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.add_foot_dialog, container, false);
-        //(4) dialogdaki asıl bileşen id'leri buradaki id'lere bağlanır.
+
         toolbar = root.findViewById(R.id.toolbar_foot);
         textViewDate = root.findViewById(R.id.text_view_select_date_foot);
         editTextDoctorName = root.findViewById(R.id.editText_name_foot);
-        // editTextRepostName = root.findViewById(R.id.editText_hospital_b);
+
 
         chipGroupScheduleTimes = root.findViewById(R.id.chip_group_times_foot);
         recyclerView = root.findViewById(R.id.recycler_view_time_foot);
@@ -125,15 +122,15 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
         toolbar.inflateMenu(R.menu.add_dialog_menu);
         toolbar.setOnMenuItemClickListener(this);
 
-        final Calendar c = Calendar.getInstance(); //içinde bulunduğumuz gün ay ve yıl.
+        final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR); //
         int mMonth = c.get(Calendar.MONTH); //
         int mDay = c.get(Calendar.DAY_OF_MONTH); //
 
         calendar = Calendar.getInstance();
         calendar.set(mYear, mMonth, mDay);
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy"); //data formatı
-        textViewDate.setText(format.format(calendar.getTime())); //datetext e set edilir. Sistem günü xml dosyası açılır açılmaz görünür
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+        textViewDate.setText(format.format(calendar.getTime()));
 
 
         textViewDate.setOnClickListener(view1 -> {
@@ -146,7 +143,7 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
 
 
                     }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); //HATA DÜZELTİLMESİ: Sistem gününden
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             //Access to previous days is denied because access to previous days has stopped the application.
             datePickerDialog.show();
         });
@@ -291,7 +288,7 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
             case "Alarm":
                 setAlarmBlood(calendar, bloodName);
                 break;
-            default: //hata mı değil mi tam olarak anlayamadım.
+            default:
                 setAlarmBlood(calendar, bloodName);
                 setNotification(calendar, bloodName);
 
@@ -305,7 +302,7 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
     }
 
     public void setAlarmBlood(Calendar mAlarmTime, String medicineName) {
-        Intent intent = new Intent(getActivity(), AlarmBloodActivity.class);
+        Intent intent = new Intent(getActivity(), AlarmFootActivity.class);
         intent.putExtra("footName", medicineName);
 
         PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -324,7 +321,7 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
     private void setNotification(Calendar mNotificationTime, String medicineName) {
 
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-        Intent notificationIntent = new Intent(getContext(), AlarmReciverBlood.class);
+        Intent notificationIntent = new Intent(getContext(), AlarmReceiverFoot.class);
         notificationIntent.putExtra("footName", medicineName);
 
         PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);

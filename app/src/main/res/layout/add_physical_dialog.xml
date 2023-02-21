@@ -230,7 +230,7 @@
                         android:checked="true"
                         app:singleSelection="true"
                         app:selectionRequired="true"
-                        app:checkedChip="@+id/chip_alarm_activity"
+                        app:checkedChip="@+id/chip_notification_activity"
                         app:singleLine="true"
                         android:layout_gravity="center"
                         style="@style/Widget.MaterialComponents.Chip.Choice"

@@ -56,10 +56,6 @@ import java.util.List;
 
 public class AddDialogBlood extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog_Blood";
-
-    /*Encoding the page where the alarm was added by the user*/
-
-    /*(1) In this section, the ids of the components on the add_medicine_dialog.xml page are defined*/
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextDoctorName, editTextHospitalName;
@@ -83,22 +79,22 @@ public class AddDialogBlood extends DialogFragment implements Toolbar.OnMenuItem
     public AddDialogBlood(BloodActivity homeFragment) {
         this.homeFragment = homeFragment;
     }
-    /*(1)*/
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); //(2) normal stil ve açılan xml dosyasının full ekran olmasını sağlayan kod.
+        super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
     }
 
     @Override
-    public void onStart() {  //(3) dialog başlatıldığı an ekrandaki boyutlarının ayarlanması
+    public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);//(3.1) Boyutlar set edilir.
+            dialog.getWindow().setLayout(width, height);
 
         }
     }
@@ -107,7 +103,7 @@ public class AddDialogBlood extends DialogFragment implements Toolbar.OnMenuItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.add_blood_dialog, container, false);
-        //(4) dialogdaki asıl bileşen id'leri buradaki id'lere bağlanır.
+
         toolbar = root.findViewById(R.id.toolbar_blood);
         textViewDate = root.findViewById(R.id.text_view_select_date_blood);
         editTextDoctorName = root.findViewById(R.id.editText_name_blood);
@@ -298,7 +294,7 @@ public class AddDialogBlood extends DialogFragment implements Toolbar.OnMenuItem
             case "Alarm":
                 setAlarmBlood(calendar, bloodName);
                 break;
-            default: //hata mı değil mi tam olarak anlayamadım.
+            default:
                 setAlarmBlood(calendar, bloodName);
                 setNotification(calendar, bloodName);
             setNotification2(calendar, bloodName);

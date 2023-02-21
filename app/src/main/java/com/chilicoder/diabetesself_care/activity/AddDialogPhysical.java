@@ -49,10 +49,6 @@ import java.util.List;
 
 public class AddDialogPhysical extends DialogFragment implements Toolbar.OnMenuItemClickListener {
     public static final String TAG = "Add_Dialog_Diet";
-
-    /*Encoding the page where the alarm was added by the user*/
-
-    /*(1) In this section, the ids of the components on the add_medicine_dialog.xml page are defined*/
     private MaterialToolbar toolbar;
     private MaterialTextView textViewDate;
     private EditText editTextMedicineName,minEditText;
@@ -80,18 +76,18 @@ public class AddDialogPhysical extends DialogFragment implements Toolbar.OnMenuI
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); //(2) normal stil ve açılan xml dosyasının full ekran olmasını sağlayan kod.
+        super.onCreate(savedInstanceState); //(2) normal style and the code that makes the opened xml file full screen.
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
     }
 
     @Override
-    public void onStart() {  //(3) dialog başlatıldığı an ekrandaki boyutlarının ayarlanması
+    public void onStart() {  //(3) Adjusting the size of the dialog on the screen when it is started
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);//(3.1) Boyutlar set edilir.
+            dialog.getWindow().setLayout(width, height);
 
         }
     }
@@ -100,7 +96,7 @@ public class AddDialogPhysical extends DialogFragment implements Toolbar.OnMenuI
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.add_physical_dialog, container, false);
-        //(4) dialogdaki asıl bileşen id'leri buradaki id'lere bağlanır.
+
         toolbar = root.findViewById(R.id.toolbar_activity);
         textViewDate = root.findViewById(R.id.text_view_select_date_activity);
         editTextMedicineName = root.findViewById(R.id.editText_name_activity);
@@ -125,29 +121,28 @@ public class AddDialogPhysical extends DialogFragment implements Toolbar.OnMenuI
         toolbar.inflateMenu(R.menu.add_dialog_menu);
         toolbar.setOnMenuItemClickListener(this);
 
-        final Calendar c = Calendar.getInstance(); //içinde bulunduğumuz gün ay ve yıl.
+        final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR); //
         int mMonth = c.get(Calendar.MONTH); //
         int mDay = c.get(Calendar.DAY_OF_MONTH); //
 
         calendar = Calendar.getInstance();
         calendar.set(mYear, mMonth, mDay);
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy"); //data formatı
-        textViewDate.setText(format.format(calendar.getTime())); //datetext e set edilir. Sistem günü xml dosyası açılır açılmaz görünür
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+        textViewDate.setText(format.format(calendar.getTime()));
 
 
         textViewDate.setOnClickListener(view1 -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
                     (view2, year, monthOfYear, dayOfMonth) -> {
-                        // edittext'e burada sistem saati set edilir
+
                         calendar.set(year, monthOfYear, dayOfMonth);
                         SimpleDateFormat format1 = new SimpleDateFormat("EEEE, MMMM d, yyyy");
                         textViewDate.setText(format1.format(calendar.getTime()));
 
 
                     }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); //HATA DÜZELTİLMESİ: Sistem gününden
-            //önceki günlere erişim uygulamayı durdurduğu için önceki günlere erişim engellendi.
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePickerDialog.show();
         });
 
@@ -281,7 +276,7 @@ public class AddDialogPhysical extends DialogFragment implements Toolbar.OnMenuI
             case "Alarm":
                 setAlarmPhysical(calendar, medicineName);
                 break;
-            default: //hata mı değil mi tam olarak anlayamadım.
+            default:
                 setAlarmPhysical(calendar, medicineName);
                 setNotification(calendar, medicineName);
                 break;

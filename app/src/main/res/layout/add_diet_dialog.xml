@@ -213,7 +213,7 @@
                         android:checked="true"
                         app:singleSelection="true"
                         app:selectionRequired="true"
-                        app:checkedChip="@+id/chip_alarm_diet"
+                        app:checkedChip="@+id/chip_notification_diet"
                         app:singleLine="true"
                         android:layout_gravity="center"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
