@@ -305,16 +305,22 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
         Intent intent = new Intent(getActivity(), AlarmFootActivity.class);
         intent.putExtra("footName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    //    PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         /** Getting a reference to the System Service ALARM_SERVICE */
         AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
 
     }
 
@@ -324,8 +330,23 @@ public class AddDialogFoot extends DialogFragment implements Toolbar.OnMenuItemC
         Intent notificationIntent = new Intent(getContext(), AlarmReceiverFoot.class);
         notificationIntent.putExtra("footName", medicineName);
 
-        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        } else {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        }
 
         Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));

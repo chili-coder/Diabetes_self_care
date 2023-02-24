@@ -139,15 +139,28 @@ public class AlarmPhysicalActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmPhysicalActivity.class);
         intent.putExtra("activityName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        /** Getting a reference to the System Service ALARM_SERVICE */
         AlarmManager alarmManagerNew = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmPhysicalActivity.this, 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(),  pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmPhysicalActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
+
+     //   PendingIntent operation = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        /** Getting a reference to the System Service ALARM_SERVICE */
+
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
+//        } else
+//            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
 
     }
 

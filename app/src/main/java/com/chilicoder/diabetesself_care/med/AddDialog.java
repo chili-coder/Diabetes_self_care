@@ -264,14 +264,14 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
         calendar.set(Calendar.MILLISECOND, 0);
         switch (alertType) {
             case "Bildirim":
-                setNotification(calendar, medicineName);
+             setNotification(calendar, medicineName);
                 break;
             case "Alarm":
-                setAlarm(calendar, medicineName);
+              setAlarm(calendar, medicineName);
                 break;
             default: //I'm not sure if it's an error or not.
-                setAlarm(calendar, medicineName);
-                setNotification(calendar, medicineName);
+             setAlarm(calendar, medicineName);
+             setNotification(calendar, medicineName);
                 break;
 
         }
@@ -282,21 +282,28 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
     }
 
     public void setAlarm(Calendar mAlarmTime, String medicineName) {
+        AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getActivity(), AlarmActivity.class);
         intent.putExtra("medicineName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
+
+       // PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         /** Getting a reference to the System Service ALARM_SERVICE */
-        AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
 
-    }
+        }
 
     private void setNotification(Calendar mNotificationTime, String medicineName) {
 
@@ -304,8 +311,29 @@ public class AddDialog extends DialogFragment implements Toolbar.OnMenuItemClick
 
         Intent notificationIntent = new Intent(getContext(), AlarmReceiver.class);
         notificationIntent.putExtra("medicineName", medicineName);
-        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        } else {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        }
+
+
+
+        //PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
     }

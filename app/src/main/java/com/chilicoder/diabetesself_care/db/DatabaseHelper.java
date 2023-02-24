@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<MedItem> getMedicineList() {
         List<MedItem> medicineList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, null);
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_NAME, KEY_TIMES_PER_DAY}, null, null, null, null, KEY_ID+" DESC");
         while (cursor.moveToNext()) {
             MedItem homeItem = new MedItem(cursor.getString(0)  , cursor.getString(1) + " times a day");
             medicineList.add(homeItem);
@@ -141,7 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int mPerDay = 0, mTotalDodes = 0;
         int day = 0, month = 0, year = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES}, KEY_NAME + " = ?", new String[]{medicineName}, null, null, KEY_ID+" DESC");
+        Cursor cursor = db.query(DB_TABLE, new String[]{KEY_DAY, KEY_MONTH, KEY_YEAR, KEY_TIMES_PER_DAY, KEY_TOTAL_DOSES}, KEY_NAME + " = ?", new String[]{medicineName}, null, null, KEY_ID);
         while (cursor.moveToNext()) {
             day = cursor.getInt(0);
             month = cursor.getInt(1);

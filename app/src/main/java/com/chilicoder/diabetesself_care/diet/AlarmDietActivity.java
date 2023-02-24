@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.chilicoder.diabetesself_care.AlarmActivity;
 import com.chilicoder.diabetesself_care.R;
+import com.chilicoder.diabetesself_care.activity.AlarmPhysicalActivity;
 import com.chilicoder.diabetesself_care.db.DatabaseHelper;
 
 import java.text.SimpleDateFormat;
@@ -134,18 +135,20 @@ public class AlarmDietActivity extends AppCompatActivity {
     }
 
     public void setAlarmDiet(Calendar mAlarmTime, String medicineName) {
+        AlarmManager alarmManagerNew = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmDietActivity.class);
         intent.putExtra("dietName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        /** Getting a reference to the System Service ALARM_SERVICE */
-        AlarmManager alarmManagerNew = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmDietActivity.this, 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(),  pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmDietActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
     }
 }

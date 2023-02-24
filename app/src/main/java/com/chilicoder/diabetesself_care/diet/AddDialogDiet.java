@@ -220,84 +220,98 @@ public class AddDialogDiet extends DialogFragment implements Toolbar.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        MainActivity homeActivity = (MainActivity) getActivity();
-        String medicineName = editTextMedicineName.getText().toString();
-        if (medicineName.isEmpty()) {
-            editTextMedicineName.setError("Enter a Name");  //error message appears in margin when no name is entered
-            return false;
-        }
-        if (homeActivity.timeItems.size() != mPerDay) {
-            showAlertDialog("Time");
-            return false;
-        }
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int noOfTimesPerDay = mPerDay;
-        int noOfDoses = noOfTotalTimes = numberPicker.getValue();
-        String reminderAlterType = alertType = chipSelected.getText().toString();
 
 
-        ArrayList<String> takeTime = new ArrayList<>();
-        for (int i = 0; i < homeActivity.timeItems.size(); i++) {
-            takeTime.add(homeActivity.timeItems.get(i).getHour() + ":" + homeActivity.timeItems.get(i).getMinute());
-        }
-
-        JSONObject json = new JSONObject();
         try {
-            json.put("timingArrays", new JSONArray(takeTime));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String timingList = json.toString();
-        Log.d(TAG, "arrayList:" + timingList);
-        DatabaseHelperDiet databaseHelper = new DatabaseHelperDiet(getContext());
-        databaseHelper.insertNewDiet(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
-        Calendar calendar = Calendar.getInstance();
-        //BUG: Fixed the alarm sounding from the system day even though the user has selected a day.
-        //The day selected by the user was only displayed in the edittext, but not in the setAlarm function.
-        // fixed.
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DAY_OF_MONTH,day);
+            MainActivity homeActivity = (MainActivity) getActivity();
+            String medicineName = editTextMedicineName.getText().toString();
+            if (medicineName.isEmpty()) {
+                editTextMedicineName.setError("Enter a Name");  //error message appears in margin when no name is entered
+                return false;
+            }
+            if (homeActivity.timeItems.size() != mPerDay) {
+                showAlertDialog("Time");
+                return false;
+            }
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int noOfTimesPerDay = mPerDay;
+            int noOfDoses = noOfTotalTimes = numberPicker.getValue();
+            String reminderAlterType = alertType = chipSelected.getText().toString();
 
-        calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
-        calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        switch (alertType) {
-            case "Bildirim":
-                setNotification(calendar, medicineName);
-                break;
-            case "Alarm":
-                setAlarmDiet(calendar, medicineName);
-                break;
-            default:
-                setAlarmDiet(calendar, medicineName);
-                setNotification(calendar, medicineName);
-                break;
 
+            ArrayList<String> takeTime = new ArrayList<>();
+            for (int i = 0; i < homeActivity.timeItems.size(); i++) {
+                takeTime.add(homeActivity.timeItems.get(i).getHour() + ":" + homeActivity.timeItems.get(i).getMinute());
+            }
+
+            JSONObject json = new JSONObject();
+            try {
+                json.put("timingArrays", new JSONArray(takeTime));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String timingList = json.toString();
+            Log.d(TAG, "arrayList:" + timingList);
+            DatabaseHelperDiet databaseHelper = new DatabaseHelperDiet(getContext());
+            databaseHelper.insertNewDiet(medicineName, day, month, year, noOfTimesPerDay, noOfDoses, timingList, reminderAlterType);
+            Calendar calendar = Calendar.getInstance();
+            //BUG: Fixed the alarm sounding from the system day even though the user has selected a day.
+            //The day selected by the user was only displayed in the edittext, but not in the setAlarm function.
+            // fixed.
+            calendar.set(Calendar.YEAR,year);
+            calendar.set(Calendar.MONTH,month);
+            calendar.set(Calendar.DAY_OF_MONTH,day);
+
+            calendar.set(Calendar.HOUR_OF_DAY, homeActivity.timeItems.get(0).getHour());
+            calendar.set(Calendar.MINUTE, homeActivity.timeItems.get(0).getMinute());
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            switch (alertType) {
+                case "Bildirim":
+                    setNotification(calendar, medicineName);
+                    break;
+                case "Alarm":
+                    setAlarmDiet(calendar, medicineName);
+                    break;
+                default:
+                    setAlarmDiet(calendar, medicineName);
+                    setNotification(calendar, medicineName);
+                    break;
+
+            }
+            Log.i("AddDialogDiet.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+            homeFragment.loadDiet();
+            dismiss();
+        }catch (Exception e){
+            Toast.makeText(getContext(), ""+e, Toast.LENGTH_SHORT).show();
         }
-        Log.i("AddDialogDiet.java", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
-        homeFragment.loadDiet();
-        dismiss();
+
         return true;
     }
 
     public void setAlarmDiet(Calendar mAlarmTime, String medicineName) {
+        AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getActivity(), AlarmDietActivity.class);
         intent.putExtra("dietName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         /** Getting a reference to the System Service ALARM_SERVICE */
-        AlarmManager alarmManagerNew = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
+
+
 
     }
 
@@ -307,8 +321,26 @@ public class AddDialogDiet extends DialogFragment implements Toolbar.OnMenuItemC
 
         Intent notificationIntent = new Intent(getContext(), AlarmReciverDiet.class);
         notificationIntent.putExtra("dietName", medicineName);
-        PendingIntent broadcast = PendingIntent.getBroadcast(getContext(), 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        } else {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getContext(),
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        }
+
         Toast.makeText(getContext(), mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
     }

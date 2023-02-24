@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.chilicoder.diabetesself_care.AlarmActivity;
 import com.chilicoder.diabetesself_care.R;
+import com.chilicoder.diabetesself_care.activity.AlarmPhysicalActivity;
 import com.chilicoder.diabetesself_care.diet.AlarmDietActivity;
 import com.chilicoder.diabetesself_care.followup.AlarmReciverFollowup;
 import com.chilicoder.diabetesself_care.followup.DatabaseHelperFollowup;
@@ -142,18 +143,20 @@ public class AlarmBloodActivity extends AppCompatActivity {
     }
 
     public void setAlarmBlood(Calendar mAlarmTime, String medicineName) {
+        AlarmManager alarmManagerNew = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this,AlarmBloodActivity.class);
         intent.putExtra("bloodName", medicineName);
 
-        PendingIntent operation = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        /** Getting a reference to the System Service ALARM_SERVICE */
-        AlarmManager alarmManagerNew = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
-        } else
-            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), operation);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmBloodActivity.this, 0, intent, PendingIntent.FLAG_MUTABLE);
+            alarmManagerNew.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(),  pendingIntent);
+        } else {
+            pendingIntent = PendingIntent.getActivity
+                    (AlarmBloodActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManagerNew.setExact(AlarmManager.RTC_WAKEUP, mAlarmTime.getTimeInMillis(), pendingIntent);
+        }
 
     }
 
@@ -163,8 +166,28 @@ public class AlarmBloodActivity extends AppCompatActivity {
 
         Intent notificationIntent = new Intent(this, AlarmReciverBlood.class);
         notificationIntent.putExtra("bloodName", medicineName);
-        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+//        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//       alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), broadcast);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    AlarmBloodActivity.this,
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        } else {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    AlarmBloodActivity.this,
+                    100,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, mNotificationTime.getTimeInMillis(), pendingIntent);
+        }
+
         Toast.makeText(this, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE), Toast.LENGTH_SHORT).show();
         Log.d(TAG, mNotificationTime.get(Calendar.HOUR_OF_DAY) + ":" + mNotificationTime.get(Calendar.MINUTE));
     }
